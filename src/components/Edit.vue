@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getSchemaTypes } from '../api';
+import getSchemaTypes from '../api';
 
 export default {
   name: 'Edit',
