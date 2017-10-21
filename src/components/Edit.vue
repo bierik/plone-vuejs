@@ -10,6 +10,8 @@
         {{ fieldsProperties[field] }}
       </div>
     </div>
+
+    <vue-form-generator :schema="schema" :model="model" :options="formOptions"></vue-form-generator>
   </div>
 </template>
 
@@ -23,6 +25,12 @@ export default {
       loading: false,
       fields: null,
       fieldsProperties: null,
+      model: {},
+      schema: { fields: [{}] },
+      formOptions: {
+        validateAfterLoad: true,
+        validateAfterChanged: true,
+      },
     };
   },
   props: [
@@ -40,6 +48,7 @@ export default {
         if (post) {
           this.loading = false;
           this.fields = post.fieldsets[0].fields;
+          this.schema.fields = post.fieldsets[0].fields;
           this.fieldsProperties = post.properties;
         }
       });
