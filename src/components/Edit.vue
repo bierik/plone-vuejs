@@ -16,9 +16,14 @@
 </template>
 
 <script>
-import getSchemaTypes from '../api';
+import getSchemaTypes from '@/api';
+import schemaType from '@/helper';
+import VueFormGenerator from 'vue-form-generator';
 
 export default {
+  components: {
+    'vue-form-generator': VueFormGenerator.component,
+  },
   name: 'Edit',
   data() {
     return {
@@ -26,11 +31,8 @@ export default {
       fields: null,
       fieldsProperties: null,
       model: {},
-      schema: { fields: [{}] },
-      formOptions: {
-        validateAfterLoad: true,
-        validateAfterChanged: true,
-      },
+      schema: { fields: [] },
+      formOptions: {},
     };
   },
   props: [
@@ -41,15 +43,22 @@ export default {
   },
   methods: {
     fetchData() {
-      this.error = null;
       this.loading = true;
       getSchemaTypes(this.type).then((post) => {
-        console.log(post);
         if (post) {
           this.loading = false;
           this.fields = post.fieldsets[0].fields;
-          this.schema.fields = post.fieldsets[0].fields;
           this.fieldsProperties = post.properties;
+          this.fields.forEach((field) => {
+            const schemaHelper = Object.prototype.hasOwnProperty.call(this.fieldsProperties[field], 'widget')
+              ? { ...schemaType[this.fieldsProperties[field].widget] }
+              : { ...schemaType[this.fieldsProperties[field].type] };
+            if (Object.keys(schemaHelper).length) {
+              schemaHelper.label = field;
+              schemaHelper.model = field;
+              this.schema.fields.push(schemaHelper);
+            }
+          });
         }
       });
     },

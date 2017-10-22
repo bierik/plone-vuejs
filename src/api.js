@@ -3,7 +3,7 @@ const options = { method: 'GET',
   headers: {
     'Content-type': 'application/json',
     Accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmdWxsbmFtZSI6IlRlc3QgVXNlciIsInN1YiI6InRlc3R1c2VyIiwiZXhwIjoxNTA4NjIwNjMyfQ.FhyDLcHrl_ESRgB6Nw9fe5y32jMgSLO8rL8F_MKviUo',
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmdWxsbmFtZSI6IlRlc3QgVXNlciIsInN1YiI6InRlc3R1c2VyIiwiZXhwIjoxNTA4NzAyODgzfQ.ChgNpKsLTtJHJ0SBoUFUJA2l1y6HJ_Tl6tTofiZLnLI',
   },
   mode: 'cors',
   cache: 'default',
