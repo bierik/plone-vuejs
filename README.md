@@ -1,5 +1,7 @@
 # plone-vuejs
 
+[![Build Status](https://travis-ci.org/bierik/plone-vuejs.svg?branch=master)](https://travis-ci.org/bierik/plone-vuejs)
+
 > A simple Vue.js SDK to build web sites easily on top of the Plone RESTAPI
 
 ## Build Setup

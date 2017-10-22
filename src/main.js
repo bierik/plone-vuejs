@@ -3,6 +3,17 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import Traverser from '@/traverser/traverser';
+import FolderComponent from '@/components/FolderComponent';
+
+
+Vue.use(Traverser, [
+  {
+    view: 'view',
+    type: 'Folder',
+    component: FolderComponent,
+  },
+]);
 
 Vue.config.productionTip = false;
 
