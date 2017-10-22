@@ -1,33 +1,106 @@
-import { viewsToRoutes } from '@/traverser/traverser';
-import Traverser from '@/traverser/traverser';
+import Traverser, { lookup, viewsToRoutes } from '@/traverser/traverser';
 import Vue from 'vue';
 import Router from 'vue-router';
+import App from '@/App';
+import moxios from 'moxios';
 
 
 describe('traverser', () => {
-  test('viewsToRoutes', () => {
+
+  beforeEach(() => moxios.install());
+
+  afterEach(() => moxios.uninstall());
+
+  test('lookup', (done) => {
+
+    moxios.stubRequest('http://fake:8080/plone/folder', {
+      status: 200,
+      response: { '@type': 'Folder' },
+    });
+
+    moxios.stubRequest('http://fake:8080/plone/folder/@edit', {
+      status: 200,
+      response: { '@type': 'Folder' },
+    });
+
+    moxios.stubRequest('http://fake:8080/plone/event/@list', {
+      status: 200,
+      response: { '@type': 'Event' },
+    });
+
+    moxios.stubRequest('http://fake:8080/plone/event', {
+      status: 200,
+      response: { '@type': 'Event' },
+    });
+
     const views = [
-      { view: 'view', type: 'Folder', component: {} },
-      { view: 'edit', type: '*', component: {} },
+      { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } },
+      { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+      { view: 'list', type: 'Event', component: { name: 'EventListComponent' } },
+      { view: 'view', type: 'Event', component: { name: 'EventViewComponent' } },
+    ];
+
+    const paths = [
+      '/folder',
+      '/folder/@edit',
+      '/event/@list',
+      '/event',
     ]
 
-    assert.deepEqual(
-      viewsToRoutes(views),
-      [
-        { path: '*/@view', component: {} },
-        { path: '*/@edit', component: {} },
-      ]
-    );
+    Promise.all(paths.map(p => lookup(views, p))).then((cs) => {
+      assert.deepEqual(
+        cs.map(c => c.component.name),
+        [
+          'FolderViewComponent',
+          'FolderEditComponent',
+          'EventListComponent',
+          'EventViewComponent',
+        ],
+      );
+      done();
+    });
   });
 
-  test('vue router has to be installed', () => {
-    Vue.use(Router);
+  test('matches given view when navigating', (done) => {
 
-    assert.throws(
-      Vue.use(Traverser),
-      Error,
-      'vue-router has to be installed',
-    );
+    moxios.stubRequest('http://fake:8080/plone/folder', {
+      status: 200,
+      response: {
+        '@type': 'Folder',
+        title: 'Title',
+        text: 'text',
+      },
+    });
+
+    Vue.use(Router);
+    Vue.use(Traverser)
+
+    const router = new Router();
+
+    const vm = new Vue({
+      router: router,
+      views: [
+        { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } },
+      ],
+      template: "<router-view></router-view>",
+      watch: {
+        '$route': () => {
+          assert.equal(vm.$component.name, 'FolderViewComponent');
+          assert.deepEqual(
+            vm.$context,
+            {
+              '@type': 'Folder',
+              title: 'Title',
+              text: 'text',
+            }
+          );
+          done();
+        }
+      }
+    });
+
+    router.push('/folder');
+
   });
 });
 

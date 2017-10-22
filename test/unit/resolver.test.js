@@ -1,4 +1,4 @@
-import resolve from '@/traverser/resolver';
+import resolve, { extractView } from '@/traverser/resolver';
 import moxios from 'moxios';
 import axios from 'axios';
 
@@ -20,17 +20,47 @@ describe('resolver', () => {
       response: { title: 'folder' },
     });
 
-    resolve('/').then((res) => {
+    resolve('/').then(({ res }) => {
       assert.deepEqual(res, { title: 'root' })
       moxios.uninstall();
       done();
     });
 
-    resolve('/folder').then((res) => {
+    resolve('/folder').then(({ res }) => {
       assert.deepEqual(res, { title: 'folder' })
       moxios.uninstall();
       done();
     });
   });
-});
 
+  test('extracts the view from path', () => {
+
+    const paths = [
+      '',
+      '/',
+      'plone',
+      'plone/folder',
+      'plone/folder/@edit',
+      'plone/folder@edit',
+      'plone/folder/@edit',
+      'plone/folder/@edit?key=value',
+      'plone/folder/edit/@list',
+    ]
+
+    assert.deepEqual(
+      paths.map(extractView),
+      [
+        'view',
+        'view',
+        'view',
+        'view',
+        'edit',
+        'view',
+        'edit',
+        'edit',
+        'list',
+      ]
+    )
+
+  });
+});
