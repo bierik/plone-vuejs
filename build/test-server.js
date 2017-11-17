@@ -3,20 +3,19 @@ require('./check-versions')()
 
 const config = require('../config')
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+  process.env.NODE_ENV = JSON.parse(config.test.env.NODE_ENV)
 }
 
-const opn = require('opn')
 const path = require('path')
 const express = require('express')
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
-const webpackConfig = require('./webpack.dev.conf')
+const webpackConfig = require('./webpack.test.conf')
 
 // default port where dev server listens for incoming traffic
-const port = process.env.PORT || config.dev.port
+const port = process.env.PORT || config.test.port
 // automatically open browser, if not set will be false
-const autoOpenBrowser = !!config.dev.autoOpenBrowser
+const autoOpenBrowser = !!config.test.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
 const proxyTable = config.dev.proxyTable
@@ -28,26 +27,6 @@ const devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
 })
-
-const hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: false,
-  heartbeat: 2000
-})
-// force page reload when html-webpack-plugin template changes
-// currently disabled until this is resolved:
-// https://github.com/jantimon/html-webpack-plugin/issues/680
-// compiler.plugin('compilation', function (compilation) {
-//   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-//     hotMiddleware.publish({ action: 'reload' })
-//     cb()
-//   })
-// })
-
-// enable hot-reload and state-preserving
-// compilation error display
-if (process.env.NODE_ENV !== 'test') {
-  app.use(hotMiddleware);
-}
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
@@ -78,25 +57,12 @@ var readyPromise = new Promise((resolve, reject) => {
 })
 
 var server
-var portfinder = require('portfinder')
-portfinder.basePort = port
 
-console.log('> Starting dev server...')
+console.log('> Starting test server...')
 devMiddleware.waitUntilValid(() => {
-  portfinder.getPort((err, port) => {
-    if (err) {
-      _reject(err)
-    }
-    process.env.PORT = port
-    var uri = 'http://localhost:' + port
-    console.log('> Listening at ' + uri + '\n')
-    // when env is testing, don't need open it
-    if (autoOpenBrowser && process.env.NODE_ENV !== 'test') {
-      opn(uri)
-    }
-    server = app.listen(port)
-    _resolve()
-  })
+  console.log('> Listening at ' + uri + '\n')
+  server = app.listen(port)
+  _resolve()
 })
 
 module.exports = {
