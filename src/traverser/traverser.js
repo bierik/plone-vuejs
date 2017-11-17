@@ -1,12 +1,14 @@
 import View from '@/traverser/view';
 import resolve from '@/traverser/resolver';
 
-
 export function lookup(views, path) {
   return resolve(path).then(({ res, view }) => {
     const type = res['@type'];
-    const component = views.find(v => v.type === type && v.view === view).component;
-    return { component, response: res };
+    const componentLookup = views.find(v => v.type === type && v.view === view);
+    if (!componentLookup) {
+      throw new Error('Component could not be found');
+    }
+    return { component: componentLookup.component, context: res };
   });
 }
 
@@ -18,27 +20,41 @@ export function traverseRouteHook(to, from, next, vm) {
   }).catch(next);
 }
 
+export function updateComponent(views, path, vm) {
+  return lookup(views, path).then(({ component, context }) => {
+    vm.prototype._component = component;
+    vm.prototype._context = context;
+  });
+}
+
 const Traverser = {
   install(Vue) {
     Vue.mixin({
       beforeCreate() {
-        const router = this.$router;
-        this.views = this.$options.views || [];
-        this.context = {};
-        if (!router) {
-          throw new Error('vue-router has to be installed');
+        if (this.$options.views) {
+          const views = this.$options.views || [];
+          Vue.util.defineReactive(Vue.prototype, '_component', {});
+          Vue.util.defineReactive(Vue.prototype, '_context', {});
+          if (!this.$router) {
+            throw new Error('vue-router has to be installed');
+          }
+          updateComponent(views, this.$route.fullPath, Vue);
+          this.$router.beforeEach((to, from, next) => {
+            updateComponent(views, to.path, Vue).then(next);
+          });
         }
-        this.$router.addRoutes([{
-          path: '*',
-          beforeEnter: (...args) => { traverseRouteHook(...args, this); },
-        }]);
       },
     });
 
-    Vue.prototype.$component = {};
-    Vue.prototype.$context = {};
+    Object.defineProperty(Vue.prototype, '$component', {
+      get() { return this._component; },
+    });
 
-    Vue.component('traverser-view', View);
+    Object.defineProperty(Vue.prototype, '$context', {
+      get() { return this._context; },
+    });
+
+    Vue.component(View.name, View);
   },
 };
 
