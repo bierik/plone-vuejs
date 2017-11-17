@@ -1,6 +1,5 @@
-import resolve, { extractView } from '@/traverser/resolver';
+import resolve, { extractView, api } from '@/traverser/resolver';
 import moxios from 'moxios';
-import axios from 'axios';
 
 
 describe('resolver', () => {
@@ -8,8 +7,14 @@ describe('resolver', () => {
 
   afterEach(() => moxios.uninstall());
 
-  test('test', (done) => {
+  test('http client configuration', () => {
+    assert.isTrue(
+      api.defaults.headers.common.Accept.includes('*/*'),
+      'For testing purposes the accept Header should contain */*',
+    );
+  });
 
+  test('resolve path', (done) => {
     moxios.stubRequest('http://fake:8080/plone/', {
       status: 200,
       response: { title: 'root' },
@@ -21,20 +26,19 @@ describe('resolver', () => {
     });
 
     resolve('/').then(({ res }) => {
-      assert.deepEqual(res, { title: 'root' })
+      assert.deepEqual(res, { title: 'root' });
       moxios.uninstall();
       done();
     });
 
     resolve('/folder').then(({ res }) => {
-      assert.deepEqual(res, { title: 'folder' })
+      assert.deepEqual(res, { title: 'folder' });
       moxios.uninstall();
       done();
     });
   });
 
   test('extracts the view from path', () => {
-
     const paths = [
       '',
       '/',
@@ -45,7 +49,7 @@ describe('resolver', () => {
       'plone/folder/@edit',
       'plone/folder/@edit?key=value',
       'plone/folder/edit/@list',
-    ]
+    ];
 
     assert.deepEqual(
       paths.map(extractView),
@@ -59,8 +63,7 @@ describe('resolver', () => {
         'edit',
         'edit',
         'list',
-      ]
-    )
-
+      ],
+    );
   });
 });

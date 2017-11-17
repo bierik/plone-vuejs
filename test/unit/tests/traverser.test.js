@@ -1,21 +1,19 @@
-import Traverser, { lookup, viewsToRoutes } from '@/traverser/traverser';
+import Traverser, { lookup } from '@/traverser/traverser';
 import Vue from 'vue';
 import Router from 'vue-router';
-import App from '@/App';
 import moxios from 'moxios';
 
 
 describe('traverser', () => {
-
   beforeEach(() => moxios.install());
 
   afterEach(() => moxios.uninstall());
 
   test('lookup', (done) => {
-
     moxios.stubRequest('http://fake:8080/plone/folder', {
       status: 200,
       response: { '@type': 'Folder' },
+      'content-type': 'application/json',
     });
 
     moxios.stubRequest('http://fake:8080/plone/folder/@edit', {
@@ -45,7 +43,7 @@ describe('traverser', () => {
       '/folder/@edit',
       '/event/@list',
       '/event',
-    ]
+    ];
 
     Promise.all(paths.map(p => lookup(views, p))).then((cs) => {
       assert.deepEqual(
@@ -62,7 +60,6 @@ describe('traverser', () => {
   });
 
   test('matches given view when navigating', (done) => {
-
     moxios.stubRequest('http://fake:8080/plone/folder', {
       status: 200,
       response: {
@@ -73,18 +70,18 @@ describe('traverser', () => {
     });
 
     Vue.use(Router);
-    Vue.use(Traverser)
+    Vue.use(Traverser);
 
     const router = new Router();
 
     const vm = new Vue({
-      router: router,
+      router,
       views: [
         { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } },
       ],
-      template: "<router-view></router-view>",
+      template: '<router-view></router-view>',
       watch: {
-        '$route': () => {
+        $route: () => {
           assert.equal(vm.$component.name, 'FolderViewComponent');
           assert.deepEqual(
             vm.$context,
@@ -92,15 +89,14 @@ describe('traverser', () => {
               '@type': 'Folder',
               title: 'Title',
               text: 'text',
-            }
+            },
           );
           done();
-        }
-      }
+        },
+      },
     });
 
     router.push('/folder');
-
   });
 });
 
