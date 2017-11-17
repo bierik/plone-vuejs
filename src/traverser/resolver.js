@@ -1,6 +1,11 @@
 import axios from 'axios';
 import normalize from '@/traverser/normalizer';
 
+export const api = process.env.NODE_ENV !== 'test' ? axios.create({
+  headers: {
+    Accept: 'application/json',
+  },
+}) : axios;
 
 export function extractView(path) {
   const matches = /\/(@[^?|/]*)/g.exec(path);
@@ -9,6 +14,6 @@ export function extractView(path) {
 }
 
 export default function resolve(path) {
-  return axios.get(normalize(path))
+  return api.get(normalize(path))
     .then(res => ({ res: res.data, view: extractView(path) }));
 }
