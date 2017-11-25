@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
-    "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src",
     "unit": "jest test/unit",
     "unit-dev": "jest test/unit --watch",
