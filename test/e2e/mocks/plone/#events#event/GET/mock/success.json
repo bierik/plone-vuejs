@@ -1,0 +1,7 @@
+{
+  "@id": "http://localhost:8080/plone/events/event",
+  "@type": "Event",
+  "description": "description of event",
+  "id": "event",
+  "title": "event"
+}

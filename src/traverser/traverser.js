@@ -1,4 +1,5 @@
 import View from '@/traverser/view';
+import TraverserLink from '@/traverser/traverser-link';
 import resolve from '@/traverser/resolver';
 
 export function lookup(views, path) {
@@ -6,18 +7,10 @@ export function lookup(views, path) {
     const type = res['@type'];
     const componentLookup = views.find(v => v.type === type && v.view === view);
     if (!componentLookup) {
-      throw new Error('Component could not be found');
+      throw new Error(`Component for type "${type}" could not be found`);
     }
     return { component: componentLookup.component, context: res };
   });
-}
-
-export function traverseRouteHook(to, from, next, vm) {
-  lookup(vm.views, to.path).then(({ component, response }) => {
-    vm.$component = component;
-    vm.$context = response;
-    next();
-  }).catch(next);
 }
 
 export function updateComponent(views, path, vm) {
@@ -55,6 +48,7 @@ const Traverser = {
     });
 
     Vue.component(View.name, View);
+    Vue.component(TraverserLink.name, TraverserLink);
   },
 };
 

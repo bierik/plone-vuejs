@@ -15,12 +15,12 @@ describe('resolver', () => {
   });
 
   test('resolve path', (done) => {
-    moxios.stubRequest('http://fake:8080/plone/', {
+    moxios.stubRequest('http://localhost:9000/plone/', {
       status: 200,
       response: { title: 'root' },
     });
 
-    moxios.stubRequest('http://fake:8080/plone/folder', {
+    moxios.stubRequest('http://localhost:9000/plone/folder', {
       status: 200,
       response: { title: 'folder' },
     });

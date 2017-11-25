@@ -1,0 +1,14 @@
+{
+  "@id": "http://localhost:8080/plone/news",
+  "@type": "Folder",
+  "id": "news",
+  "title": "news",
+  "items": [
+    {
+      "@id": "http://localhost:8080/plone/news/newsitem",
+      "@type": "News Item",
+      "description": "description of newsitem",
+      "title": "newsitem"
+    }
+  ]
+}

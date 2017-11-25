@@ -1,5 +1,5 @@
 const server = require('../../build/test-server.js');
-const mockServer = require('../../build/mock-server');
+const mockServer = require('./mock-server');
 const { spawn } = require('child_process');
 const spawnargs = require('spawn-args');
 
