@@ -48,7 +48,7 @@ const Traverser = {
     });
 
     Vue.component(View.name, View);
-    Vue.directive(TraverserLink.name, TraverserLink);
+    Vue.component(TraverserLink.name, TraverserLink);
   },
 };
 

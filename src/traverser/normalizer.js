@@ -12,3 +12,8 @@ export default function normalize(url) {
   const parsedApiRoot = parse(API_ROOT);
   return `${parsedApiRoot.origin}${joinPath(parsedApiRoot.pathname, PLONE_ROOT, url)}`;
 }
+
+export function createLink(url) {
+  const path = parse(url).pathname.replace(PLONE_ROOT, '');
+  return `/#${joinPath('/', path)}`;
+}
