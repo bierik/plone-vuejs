@@ -1,0 +1,6 @@
+{
+  "@id": "http://localhost:8080/Plone/events",
+  "@type": "Folder",
+  "id": "events",
+  "title": "events"
+}

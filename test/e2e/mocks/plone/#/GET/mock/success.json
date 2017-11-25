@@ -1,0 +1,25 @@
+{
+  "@id": "http://localhost:8080/Plone/",
+  "@type": "Plone Site",
+  "id": "Plone",
+  "items": [
+    {
+      "@id": "http://localhost:8080/Plone/document",
+      "@type": "Document",
+      "description": "description of document",
+      "title": "document"
+    },
+    {
+      "@id": "http://localhost:8080/Plone/news",
+      "@type": "Folder",
+      "description": "description of news folder",
+      "title": "news"
+    },
+    {
+      "@id": "http://localhost:8080/Plone/events",
+      "@type": "Folder",
+      "description": "description of events folder",
+      "title": "events"
+    }
+  ]
+}

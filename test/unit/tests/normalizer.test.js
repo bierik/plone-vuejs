@@ -3,18 +3,18 @@ import normalize from '@/traverser/normalizer';
 describe('normalizer', () => {
   test('test', () => {
     assert.equal(
-      normalize('http://fake:8080/plone/'),
-      'http://fake:8080/plone/',
+      normalize('http://localhost:9000/plone/'),
+      'http://localhost:9000/plone/',
     );
 
     assert.equal(
       normalize('folder/'),
-      'http://fake:8080/plone/folder/',
+      'http://localhost:9000/plone/folder/',
     );
 
     assert.equal(
       normalize('/'),
-      'http://fake:8080/plone/',
+      'http://localhost:9000/plone/',
     );
   });
 });

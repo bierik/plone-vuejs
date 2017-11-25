@@ -1,7 +1,6 @@
 <template>
-  <section id="folder">
-    <h1>Folder</h1>
-    <h2>{{context.title}}</h2>
+  <section id="plone-site">
+    <h1>Plone Site</h1>
     <ul>
       <li v-for="item in context.items" :key="item['@id']"><a v-traverse='item' href="#">{{item.title}}</a></li>
     </ul>
@@ -12,6 +11,6 @@ import basecomponent from '@/traverser/basecomponent';
 
 export default {
   mixins: [basecomponent],
-  name: 'folder',
+  name: 'plone-site',
 };
 </script>

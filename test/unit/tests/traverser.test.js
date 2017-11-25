@@ -10,23 +10,23 @@ describe('traverser', () => {
   afterEach(() => moxios.uninstall());
 
   test('lookup', (done) => {
-    moxios.stubRequest('http://fake:8080/plone/folder', {
+    moxios.stubRequest('http://localhost:9000/plone/folder', {
       status: 200,
       response: { '@type': 'Folder' },
       'content-type': 'application/json',
     });
 
-    moxios.stubRequest('http://fake:8080/plone/folder/@edit', {
+    moxios.stubRequest('http://localhost:9000/plone/folder/@edit', {
       status: 200,
       response: { '@type': 'Folder' },
     });
 
-    moxios.stubRequest('http://fake:8080/plone/event/@list', {
+    moxios.stubRequest('http://localhost:9000/plone/event/@list', {
       status: 200,
       response: { '@type': 'Event' },
     });
 
-    moxios.stubRequest('http://fake:8080/plone/event', {
+    moxios.stubRequest('http://localhost:9000/plone/event', {
       status: 200,
       response: { '@type': 'Event' },
     });
@@ -60,7 +60,7 @@ describe('traverser', () => {
   });
 
   test('matches given view when navigating', (done) => {
-    moxios.stubRequest('http://fake:8080/plone/folder', {
+    moxios.stubRequest('http://localhost:9000/plone/folder', {
       status: 200,
       response: {
         '@type': 'Folder',

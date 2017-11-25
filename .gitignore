@@ -13,3 +13,9 @@ test/e2e/reports/
 *.ntvs*
 *.njsproj
 *.sln
+
+# Mock server
+.validation.json
+preferences.json
+_DTO
+_collections

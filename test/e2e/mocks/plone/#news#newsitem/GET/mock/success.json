@@ -1,0 +1,7 @@
+{
+  "@id": "http://localhost:8080/Plone/news/newsitem",
+  "@type": "News Item",
+  "description": "description of newsitem",
+  "id": "newsitem",
+  "title": "newsitem"
+}

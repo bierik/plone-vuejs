@@ -1,0 +1,6 @@
+{
+  "@id": "http://localhost:8080/Plone/document",
+  "@type": "Document",
+  "id": "Document",
+  "title": "document"
+}
