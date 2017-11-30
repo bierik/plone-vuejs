@@ -7,6 +7,6 @@
   },
   "globals": {
     "assert": true,
-    "casper": true,
+    "page": true
   }
 }
