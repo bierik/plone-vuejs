@@ -1,87 +1,53 @@
-casper.test.begin('Test rendering of plone site component', (test) => {
-  casper.start(casper.options.url, () => {
-    test.assertHttpStatus(200, 'http status is 200');
+describe('Traverser view', () => {
+  test('Plone Site', async () => {
+    await page.goto('http://localhost:9000/');
+    await page.waitForSelector('#plone-site');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'plone site');
   });
 
-  casper.waitForSelector('#plone-site', () => {
-    test.assertExists('#plone-site');
+  test('Document', async () => {
+    await page.goto('http://localhost:9000/#/document');
+    await page.waitForSelector('#document');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'document');
   });
 
-  casper.run(() => {
-    test.done();
-  });
-});
-
-casper.test.begin('Test rendering of document component', (test) => {
-  casper.start(`${casper.options.url}#/document`, () => {
-    test.assertHttpStatus(200, 'http status is 200');
+  test('News', async () => {
+    await page.goto('http://localhost:9000/#/news');
+    await page.waitForSelector('#folder');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'news');
   });
 
-  casper.waitForSelector('#document', () => {
-    test.assertExists('#document');
+  test('Events', async () => {
+    await page.goto('http://localhost:9000/#/events');
+    await page.waitForSelector('#folder');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'events');
   });
 
-  casper.run(() => {
-    test.done();
-  });
-});
+  test('Newsitem', async () => {
+    await page.goto('http://localhost:9000/#/news/newsitem');
+    await page.waitForSelector('#newsitem');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'News Item');
 
-casper.test.begin('Test rendering of news component', (test) => {
-  casper.start(`${casper.options.url}#/news`, () => {
-    test.assertHttpStatus(200, 'http status is 200');
-  });
-
-  casper.waitForSelector('#folder', () => {
-    test.assertExists('#folder');
+    const newsTitle = await page.evaluate(() => document.querySelector('.title').textContent);
+    const newsDescription = await page.evaluate(() => document.querySelector('.description').textContent);
+    assert.equal(newsTitle, 'newsitem');
+    assert.equal(newsDescription, 'description of newsitem');
   });
 
-  casper.run(() => {
-    test.done();
-  });
-});
+  test('Eventitem', async () => {
+    await page.goto('http://localhost:9000/#/events/event');
+    await page.waitForSelector('#event');
+    const title = await page.evaluate(() => document.querySelector('h1').textContent);
+    assert.equal(title, 'Event Item');
 
-casper.test.begin('Test rendering of events component', (test) => {
-  casper.start(`${casper.options.url}#/events`, () => {
-    test.assertHttpStatus(200, 'http status is 200');
-  });
-
-  casper.waitForSelector('#folder', () => {
-    test.assertExists('#folder');
-  });
-
-  casper.run(() => {
-    test.done();
-  });
-});
-
-casper.test.begin('Test rendering of news item component', (test) => {
-  casper.start(`${casper.options.url}#/news/newsitem`, () => {
-    test.assertHttpStatus(200, 'http status is 200');
-  });
-
-  casper.waitForSelector('#newsitem', () => {
-    test.assertExists('#newsitem');
-    casper.test.assertEquals(casper.getHTML('.title'), 'newsitem');
-    casper.test.assertEquals(casper.getHTML('.description'), 'description of newsitem');
-  });
-
-  casper.run(() => {
-    test.done();
-  });
-});
-
-casper.test.begin('Test rendering of event component', (test) => {
-  casper.start(`${casper.options.url}#/events/event`, () => {
-    test.assertHttpStatus(200, 'http status is 200');
-  });
-
-  casper.waitForSelector('#event', () => {
-    test.assertExists('#event');
-    casper.test.assertEquals(casper.getHTML('.title'), 'event');
-    casper.test.assertEquals(casper.getHTML('.description'), 'description of event');
-  });
-
-  casper.run(() => {
-    test.done();
+    const newsTitle = await page.evaluate(() => document.querySelector('.title').textContent);
+    const newsDescription = await page.evaluate(() => document.querySelector('.description').textContent);
+    assert.equal(newsTitle, 'event');
+    assert.equal(newsDescription, 'description of event');
   });
 });

@@ -1,7 +1,6 @@
 <template>
   <section id="document">
-    <h1>Document</h1>
-    <h2>{{context.title}}</h2>
+    <h1>{{context.title}}</h1>
   </section>
 </template>
 <script>
