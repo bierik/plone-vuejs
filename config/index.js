@@ -8,13 +8,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // proxy all requests starting with /api
+      // proxy all requests starting with /api to mockserver
       '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+        target: 'http://localhost:3000',
       }
     },
     cssSourceMap: false
@@ -27,10 +23,9 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // proxy all requests starting with /plone to mockserver
+      // proxy all requests starting with /api to mockserver
       '/api': {
         target: 'http://localhost:3000',
-        changeOrigin: true,
       }
     },
     cssSourceMap: false

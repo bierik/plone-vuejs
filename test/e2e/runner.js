@@ -1,13 +1,15 @@
+const { spawn } = require('child_process');
 const server = require('../../build/test-server.js');
 const mockServer = require('./mock-server');
-const { spawn } = require('child_process');
-const spawnargs = require('spawn-args');
-
-const opts = spawnargs('test/e2e/tests');
 
 server.ready.then(() => {
   mockServer.ready.then(() => {
-    const runner = spawn('jest', opts, { stdio: 'inherit' });
+    const runner = spawn('jest', [
+      'test/e2e/tests',
+      '--setupTestFrameworkScriptFile',
+      "'<rootDir>/test/e2e/setup.js'",
+    ], { stdio: 'inherit', shell: true });
+
     runner.on('exit', (code) => {
       server.close();
       process.exit(code);
