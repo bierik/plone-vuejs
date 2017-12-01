@@ -12,6 +12,7 @@ const express = require('express')
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./webpack.dev.conf')
+const mockServer = require('../test/e2e/mock-server');
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
@@ -33,15 +34,6 @@ const hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: false,
   heartbeat: 2000
 })
-// force page reload when html-webpack-plugin template changes
-// currently disabled until this is resolved:
-// https://github.com/jantimon/html-webpack-plugin/issues/680
-// compiler.plugin('compilation', function (compilation) {
-//   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-//     hotMiddleware.publish({ action: 'reload' })
-//     cb()
-//   })
-// })
 
 // enable hot-reload and state-preserving
 // compilation error display
@@ -70,38 +62,21 @@ app.use(staticPath, express.static('./static'))
 
 const uri = 'http://localhost:' + port
 
-var _resolve
-var _reject
-var readyPromise = new Promise((resolve, reject) => {
-  _resolve = resolve
-  _reject = reject
-})
-
-var server
 var portfinder = require('portfinder')
 portfinder.basePort = port
 
-console.log('> Starting dev server...')
-devMiddleware.waitUntilValid(() => {
-  portfinder.getPort((err, port) => {
-    if (err) {
-      _reject(err)
-    }
-    process.env.PORT = port
-    var uri = 'http://localhost:' + port
-    console.log('> Listening at ' + uri + '\n')
-    // when env is testing, don't need open it
-    if (autoOpenBrowser && process.env.NODE_ENV !== 'test') {
-      opn(uri)
-    }
-    server = app.listen(port)
-    _resolve()
-  })
-})
+mockServer.ready.then(() => {
+  console.log('> Starting dev server...')
+  devMiddleware.waitUntilValid(() => {
+    portfinder.getPort((err, port) => {
+      process.env.PORT = port
+      var uri = 'http://localhost:' + port
+      console.log('> Listening at ' + uri + '\n')
+      if (autoOpenBrowser) {
+        opn(uri)
+      }
+      app.listen(port);
+    })
+  });
+});
 
-module.exports = {
-  ready: readyPromise,
-  close: () => {
-    server.close()
-  }
-}

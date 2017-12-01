@@ -1,5 +1,5 @@
 module.exports = {
   NODE_ENV: '"development"',
-  API_ROOT: '"/api"',
-  PLONE_ROOT: '"Plone"',
+  API_ROOT: '"http://localhost:8090/api"',
+  PLONE_ROOT: '"plone"',
 };
