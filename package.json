@@ -1,9 +1,11 @@
 {
-  "name": "plone-vuejs",
-  "version": "1.0.0",
+  "name": "plone-vue",
+  "version": "0.0.1",
+  "license": "MIT",
   "description": "A simple Vue.js SDK to build web sites easily on top of the Plone RESTAPI",
   "author": "Kevin Bieri <k.bieri@4teamwork.ch>",
-  "private": true,
+  "main": "dist/plone-vue.js",
+  "module": "src/traverser/install.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
@@ -11,15 +13,14 @@
     "unit": "jest test/unit --setupTestFrameworkScriptFile='<rootDir>/test/unit/setup.js'",
     "unit-dev": "jest test/unit --watch  --setupTestFrameworkScriptFile='<rootDir>/test/unit/setup.js'",
     "e2e": "node test/e2e/runner.js",
-    "test": "yarn unit && yarn e2e"
+    "test": "yarn unit && yarn e2e",
+    "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.16.2",
     "join-path": "^1.1.1",
     "path.join": "^1.0.0",
-    "url-parse": "^1.1.9",
-    "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "url-parse": "^1.1.9"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -66,7 +67,9 @@
     "shelljs": "^0.7.6",
     "spawn-args": "^0.2.0",
     "url-loader": "^0.5.8",
+    "vue": "^2.5.2",
     "vue-loader": "^13.3.0",
+    "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.2",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
@@ -78,7 +81,6 @@
     "webpack-merge": "^4.1.0"
   },
   "jest": {
-    "roots": ["<rootDir>/test"],
     "moduleFileExtensions": [
       "js",
       "vue"
