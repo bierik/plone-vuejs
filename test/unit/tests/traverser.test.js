@@ -1,8 +1,11 @@
-import Traverser, { lookup } from '@/traverser/traverser';
+import { lookup } from '@/traverser/traverser';
+import Traverser from '@/traverser/install';
 import Vue from 'vue';
 import Router from 'vue-router';
 import moxios from 'moxios';
 
+const { API_ROOT, PLONE_ROOT } = process.env;
+const options = { ploneRoot: PLONE_ROOT, apiRoot: API_ROOT };
 
 describe('traverser', () => {
   beforeEach(() => moxios.install());
@@ -45,7 +48,7 @@ describe('traverser', () => {
       '/event',
     ];
 
-    Promise.all(paths.map(p => lookup(views, p))).then((cs) => {
+    Promise.all(paths.map(path => lookup({ views, path, options }))).then((cs) => {
       assert.deepEqual(
         cs.map(c => c.component.name),
         [
@@ -72,13 +75,19 @@ describe('traverser', () => {
     Vue.use(Router);
     Vue.use(Traverser);
 
+    const traverser = {
+      views: [ { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } } ],
+      options: {
+        ploneRoot: PLONE_ROOT,
+        apiRoot: API_ROOT,
+      },
+    };
+
     const router = new Router();
 
     const vm = new Vue({
       router,
-      views: [
-        { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } },
-      ],
+      traverser,
       template: '<router-view></router-view>',
       watch: {
         $route: () => {

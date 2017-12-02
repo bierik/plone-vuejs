@@ -13,7 +13,7 @@ export function extractView(path) {
   return view.substring(1);
 }
 
-export default function resolve(path) {
-  return api.get(normalize(path))
+export default function resolve(path, options) {
+  return api.get(normalize(path, options))
     .then(res => ({ res: res.data, view: extractView(path) }));
 }

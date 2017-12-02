@@ -6,7 +6,7 @@ export default {
   computed: {
     link() {
       const id = this.item['@id'];
-      return createLink(id);
+      return createLink(id, this.$root.$options.traverser.options);
     },
   },
   props: {

@@ -1,6 +1,7 @@
 import resolve, { extractView, api } from '@/traverser/resolver';
 import moxios from 'moxios';
 
+const { API_ROOT, PLONE_ROOT } = process.env;
 
 describe('resolver', () => {
   beforeEach(() => moxios.install());
@@ -25,13 +26,13 @@ describe('resolver', () => {
       response: { title: 'folder' },
     });
 
-    resolve('/').then(({ res }) => {
+    resolve('/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }).then(({ res }) => {
       assert.deepEqual(res, { title: 'root' });
       moxios.uninstall();
       done();
     });
 
-    resolve('/folder').then(({ res }) => {
+    resolve('/folder', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }).then(({ res }) => {
       assert.deepEqual(res, { title: 'folder' });
       moxios.uninstall();
       done();
