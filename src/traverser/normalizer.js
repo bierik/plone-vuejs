@@ -1,19 +1,16 @@
 import joinPath from 'path.join';
 import parse from 'url-parse';
 
-const { API_ROOT } = process.env;
-const { PLONE_ROOT } = process.env;
-
-export default function normalize(url) {
-  if (url.includes(API_ROOT)) {
+export default function normalize(url, { apiRoot, ploneRoot }) {
+  if (url.includes(apiRoot)) {
     return url;
   }
 
-  const parsedApiRoot = parse(API_ROOT);
-  return `${parsedApiRoot.origin}${joinPath(parsedApiRoot.pathname, PLONE_ROOT, url)}`;
+  const parsedApiRoot = parse(apiRoot);
+  return `${parsedApiRoot.origin}${joinPath(parsedApiRoot.pathname, ploneRoot, url)}`;
 }
 
-export function createLink(url) {
-  const path = parse(url).pathname.replace(PLONE_ROOT, '');
+export function createLink(url, { ploneRoot }) {
+  const path = parse(url).pathname.replace(ploneRoot, '');
   return `/#${joinPath('/', path)}`;
 }
