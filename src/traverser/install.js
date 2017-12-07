@@ -1,10 +1,13 @@
 import View from '@/traverser/view';
 import TraverserLink from '@/traverser/traverser-link';
 import { updateComponent } from '@/traverser/traverser';
+import axios from 'axios';
 
 const plugin = {
   install(Vue) {
     const traverserComponent = Vue.component('traverser-component', { template: '<p>traverser component...</p>' });
+
+    Vue.http = axios;
 
     Vue.mixin({
       beforeCreate() {
@@ -31,6 +34,8 @@ const plugin = {
     Object.defineProperty(Vue.prototype, '$context', {
       get() { return this._context; },
     });
+
+    Vue.prototype.http = axios;
 
     Vue.component(View.name, View);
     Vue.component(TraverserLink.name, TraverserLink);
