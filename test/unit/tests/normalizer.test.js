@@ -1,5 +1,4 @@
-import normalize from '@/traverser/normalizer';
-import { createLink } from '@/traverser/normalizer';
+import normalize, { createLink } from '@/traverser/normalizer';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
 

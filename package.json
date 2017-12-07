@@ -9,11 +9,11 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "npm run dev",
-    "lint": "eslint --ext .js,.vue src",
+    "lint": "eslint --ext .js,.vue src test",
     "unit": "jest test/unit --setupTestFrameworkScriptFile='<rootDir>/test/unit/setup.js'",
     "unit-dev": "jest test/unit --watch  --setupTestFrameworkScriptFile='<rootDir>/test/unit/setup.js'",
     "e2e": "node test/e2e/runner.js",
-    "test": "yarn unit && yarn e2e",
+    "test": "yarn lint && yarn unit && yarn e2e",
     "build": "node build/build.js"
   },
   "dependencies": {

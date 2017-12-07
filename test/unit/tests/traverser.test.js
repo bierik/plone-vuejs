@@ -76,7 +76,7 @@ describe('traverser', () => {
     Vue.use(Traverser);
 
     const traverser = {
-      views: [ { view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } } ],
+      views: [{ view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } }],
       options: {
         ploneRoot: PLONE_ROOT,
         apiRoot: API_ROOT,
