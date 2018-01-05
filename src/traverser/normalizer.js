@@ -1,7 +1,7 @@
 import joinPath from 'path.join';
 import parse from 'url-parse';
 
-export default function normalize(url, { apiRoot, ploneRoot }) {
+export default function createAPILink(url, { apiRoot, ploneRoot }) {
   if (url.includes(apiRoot)) {
     return url;
   }
@@ -12,5 +12,10 @@ export default function normalize(url, { apiRoot, ploneRoot }) {
 
 export function createLink(url, { ploneRoot }) {
   const path = parse(url).pathname.replace(ploneRoot, '');
-  return `/#${joinPath('/', path)}`;
+  return `#${joinPath('/', path)}`;
+}
+
+export function createTraverserLink(item, { ploneRoot }) {
+  const id = item['@id'];
+  return parse(id).pathname.replace(ploneRoot, '');
 }

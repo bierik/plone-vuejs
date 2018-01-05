@@ -85,6 +85,13 @@ export default {
 </script>
 ```
 
+Every vue instance is able to traverse to a item containing an id.
+```html
+<template>
+  <button @click="traverse(item)">Traverse</button>
+</template>
+```
+
 See `/src` for a full working example.
 
 ## Developing

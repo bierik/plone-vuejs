@@ -1,5 +1,5 @@
 import axios from 'axios';
-import normalize from '@/traverser/normalizer';
+import createAPILink from '@/traverser/normalizer';
 
 export const api = process.env.NODE_ENV !== 'test' ? axios.create({
   headers: {
@@ -14,6 +14,6 @@ export function extractView(path) {
 }
 
 export default function resolve(path, options) {
-  return api.get(normalize(path, options))
+  return api.get(createAPILink(path, options))
     .then(res => ({ res: res.data, view: extractView(path) }));
 }
