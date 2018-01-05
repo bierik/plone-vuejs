@@ -1,4 +1,5 @@
 import resolve from '@/traverser/resolver';
+import { createTraverserLink } from '@/traverser/normalizer';
 
 export function lookup({ views, path, options }) {
   return resolve(path, options).then(({ res, view }) => {
@@ -16,4 +17,8 @@ export function updateComponent({ views, path, vm, options }) {
     vm.prototype._component = component;
     vm.prototype._context = context;
   });
+}
+
+export function traverse(item, router, options) {
+  return router.push(createTraverserLink(item, options));
 }

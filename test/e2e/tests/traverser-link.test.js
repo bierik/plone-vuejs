@@ -6,7 +6,7 @@ describe('Traverser link', () => {
     assert.isDefined(await page.evaluate(() => document.querySelector('.news').textContent));
 
     const documentLink = await page.evaluate(() => document.querySelector('.news').getAttribute('href'));
-    assert.equal(documentLink, '/#/news');
+    assert.equal(documentLink, '#/news');
   });
 
   test('Traverser link goes to the page', async () => {

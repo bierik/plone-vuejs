@@ -1,6 +1,6 @@
 import View from '@/traverser/view';
 import TraverserLink from '@/traverser/traverser-link';
-import { updateComponent } from '@/traverser/traverser';
+import { updateComponent, traverse } from '@/traverser/traverser';
 import axios from 'axios';
 
 const plugin = {
@@ -16,9 +16,15 @@ const plugin = {
           const options = this.$options.traverser.options;
           Vue.util.defineReactive(Vue.prototype, '_component', traverserComponent);
           Vue.util.defineReactive(Vue.prototype, '_context', {});
+
           if (!this.$router) {
             throw new Error('vue-router has to be installed');
           }
+
+          Vue.prototype.traverse = (item) => {
+            traverse(item, this.$router, this.$options.traverser.options);
+          };
+
           updateComponent({ views, path: this.$route.fullPath, vm: Vue, options });
           this.$router.beforeEach((to, from, next) => {
             updateComponent({ views, path: to.path, vm: Vue, options }).then(next);

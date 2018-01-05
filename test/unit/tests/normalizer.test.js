@@ -1,21 +1,21 @@
-import normalize, { createLink } from '@/traverser/normalizer';
+import createAPILink, { createLink, createTraverserLink } from '@/traverser/normalizer';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
 
 describe('normalizer', () => {
-  test('normalize', () => {
+  test('createAPILink', () => {
     assert.equal(
-      normalize('http://localhost:9000/plone/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
+      createAPILink('http://localhost:9000/plone/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
       'http://localhost:9000/plone/',
     );
 
     assert.equal(
-      normalize('folder/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
+      createAPILink('folder/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
       'http://localhost:9000/plone/folder/',
     );
 
     assert.equal(
-      normalize('/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
+      createAPILink('/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }),
       'http://localhost:9000/plone/',
     );
   });
@@ -23,7 +23,19 @@ describe('normalizer', () => {
   test('createLink', () => {
     assert.equal(
       createLink('http://localhost:900/plone/document', { ploneRoot: PLONE_ROOT }),
-      '/#/document',
+      '#/document',
+    );
+  });
+
+  test('createTraverserLink', () => {
+    assert.equal(
+      createTraverserLink({ '@id': 'http://localhost:900/plone/document' }, { ploneRoot: PLONE_ROOT }),
+      '/document',
+    );
+
+    assert.equal(
+      createTraverserLink({ '@id': 'http://localhost:900/plone/document/doc1' }, { ploneRoot: PLONE_ROOT }),
+      '/document/doc1',
     );
   });
 });

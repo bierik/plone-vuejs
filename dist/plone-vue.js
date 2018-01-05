@@ -575,6 +575,41 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["c"] = createAPILink;
+/* harmony export (immutable) */ __webpack_exports__["a"] = createLink;
+/* harmony export (immutable) */ __webpack_exports__["b"] = createTraverserLink;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_path_join__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_url_parse__);
+
+
+
+function createAPILink(url, { apiRoot, ploneRoot }) {
+  if (url.includes(apiRoot)) {
+    return url;
+  }
+
+  const parsedApiRoot = __WEBPACK_IMPORTED_MODULE_1_url_parse___default()(apiRoot);
+  return `${parsedApiRoot.origin}${__WEBPACK_IMPORTED_MODULE_0_path_join___default()(parsedApiRoot.pathname, ploneRoot, url)}`;
+}
+
+function createLink(url, { ploneRoot }) {
+  const path = __WEBPACK_IMPORTED_MODULE_1_url_parse___default()(url).pathname.replace(ploneRoot, '');
+  return `#${__WEBPACK_IMPORTED_MODULE_0_path_join___default()('/', path)}`;
+}
+
+function createTraverserLink(item, { ploneRoot }) {
+  const id = item['@id'];
+  return __WEBPACK_IMPORTED_MODULE_1_url_parse___default()(id).pathname.replace(ploneRoot, '');
+}
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -672,35 +707,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["b"] = normalize;
-/* harmony export (immutable) */ __webpack_exports__["a"] = createLink;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_path_join__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_url_parse__);
-
-
-
-function normalize(url, { apiRoot, ploneRoot }) {
-  if (url.includes(apiRoot)) {
-    return url;
-  }
-
-  const parsedApiRoot = __WEBPACK_IMPORTED_MODULE_1_url_parse___default()(apiRoot);
-  return `${parsedApiRoot.origin}${__WEBPACK_IMPORTED_MODULE_0_path_join___default()(parsedApiRoot.pathname, ploneRoot, url)}`;
-}
-
-function createLink(url, { ploneRoot }) {
-  const path = __WEBPACK_IMPORTED_MODULE_1_url_parse___default()(url).pathname.replace(ploneRoot, '');
-  return `/#${__WEBPACK_IMPORTED_MODULE_0_path_join___default()('/', path)}`;
-}
-
 
 /***/ }),
 /* 4 */
@@ -1021,12 +1027,18 @@ const plugin = {
           const options = this.$options.traverser.options;
           Vue.util.defineReactive(Vue.prototype, '_component', traverserComponent);
           Vue.util.defineReactive(Vue.prototype, '_context', {});
+
           if (!this.$router) {
             throw new Error('vue-router has to be installed');
           }
-          Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["a" /* updateComponent */])({ views, path: this.$route.fullPath, vm: Vue, options });
+
+          Vue.prototype.traverse = (item) => {
+            Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["a" /* traverse */])(item, this.$router, this.$options.traverser.options);
+          };
+
+          Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["b" /* updateComponent */])({ views, path: this.$route.fullPath, vm: Vue, options });
           this.$router.beforeEach((to, from, next) => {
-            Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["a" /* updateComponent */])({ views, path: to.path, vm: Vue, options }).then(next);
+            Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["b" /* updateComponent */])({ views, path: to.path, vm: Vue, options }).then(next);
           });
         }
       },
@@ -1066,7 +1078,7 @@ const plugin = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_normalizer__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_normalizer__ = __webpack_require__(2);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -1904,8 +1916,11 @@ exports.parse = querystring;
 
 "use strict";
 /* unused harmony export lookup */
-/* harmony export (immutable) */ __webpack_exports__["a"] = updateComponent;
+/* harmony export (immutable) */ __webpack_exports__["b"] = updateComponent;
+/* harmony export (immutable) */ __webpack_exports__["a"] = traverse;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_resolver__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(2);
+
 
 
 function lookup({ views, path, options }) {
@@ -1926,6 +1941,10 @@ function updateComponent({ views, path, vm, options }) {
   });
 }
 
+function traverse(item, router, options) {
+  return router.push(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["b" /* createTraverserLink */])(item, options));
+}
+
 
 /***/ }),
 /* 21 */
@@ -1936,7 +1955,7 @@ function updateComponent({ views, path, vm, options }) {
 /* harmony export (immutable) */ __webpack_exports__["a"] = resolve;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(2);
 
 
 
@@ -1955,7 +1974,7 @@ function extractView(path) {
 }
 
 function resolve(path, options) {
-  return api.get(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["b" /* default */])(path, options))
+  return api.get(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["c" /* default */])(path, options))
     .then(res => ({ res: res.data, view: extractView(path) }));
 }
 
@@ -1971,7 +1990,7 @@ function resolve(path, options) {
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(5);
 var Axios = __webpack_require__(24);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -2054,7 +2073,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(33);
 var dispatchRequest = __webpack_require__(34);
@@ -2586,7 +2605,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(35);
 var isCancel = __webpack_require__(8);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
