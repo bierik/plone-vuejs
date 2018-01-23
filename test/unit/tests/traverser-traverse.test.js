@@ -2,23 +2,19 @@ import Traverser from '@/traverser/install';
 import Vue from 'vue';
 import Router from 'vue-router';
 import moxios from 'moxios';
+import stubRequest from '../helpers';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
 const options = { ploneRoot: PLONE_ROOT, apiRoot: API_ROOT };
+const router = new Router();
+const traverser = {
+  views: [{ view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } }],
+  options,
+};
 
 describe('Traverser traverser', () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
-
   Vue.use(Router);
   Vue.use(Traverser);
-
-  const router = new Router();
-
-  const traverser = {
-    views: [{ view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } }],
-    options,
-  };
 
   test('traverse function should be accessible on the vue components under traverse', () => {
     const vm = new Vue({ traverser, router });
@@ -28,14 +24,7 @@ describe('Traverser traverser', () => {
   test('matches given view when navigating', (done) => {
     const item = { '@id': 'http://localhost:9000/plone/folder' };
 
-    moxios.stubRequest('http://localhost:9000/plone/folder', {
-      status: 200,
-      response: {
-        '@type': 'Folder',
-        title: 'Title',
-        text: 'text',
-      },
-    });
+    stubRequest('folder', { '@type': 'Folder' });
 
     const vm = new Vue({
       router,

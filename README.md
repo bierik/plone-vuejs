@@ -85,11 +85,36 @@ export default {
 </script>
 ```
 
+### traverse programmatically
+
 Every vue instance is able to traverse to a item containing an id.
 ```html
 <template>
   <button @click="traverse(item)">Traverse</button>
 </template>
+```
+
+### onTraverse hook
+
+Every component is able to fetch additional content by defining an `onTraverse` hook. So every time the router is hitting this component the traverser fetches this additional content and pops it on the context. The URL is always relative to the current components path and can be defined by calling the `next` callback.
+So the following example shows how to fetch additional content when traversing to the `document` component. The `next('@sharing')` triggers the traverser to fetch additional content under `/document/@sharing`. The data is then available in the template using `{{context['@sharing'].title}}`.
+
+``` html
+<template>
+  <section id="document">
+    <h1>{{context.title}}</h1>
+    <p id="sharing">{{context['@sharing'].title}}</p>
+  </section>
+</template>
+<script>
+import basecomponent from '@/traverser/basecomponent';
+
+export default {
+  mixins: [basecomponent],
+  name: 'document',
+  onTraverse(from, to, next) { next('@sharing'); },
+};
+</script>
 ```
 
 See `/src` for a full working example.

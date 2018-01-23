@@ -13,6 +13,10 @@ export function extractView(path) {
   return view.substring(1);
 }
 
+export function redirect(path, options) {
+  return api.get(createAPILink(path, options)).catch('redirect');
+}
+
 export default function resolve(path, options) {
   return api.get(createAPILink(path, options))
     .then(res => ({ res: res.data, view: extractView(path) }));

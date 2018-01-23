@@ -2,13 +2,19 @@ import Traverser from '@/traverser/install';
 import Vue from 'vue';
 import Router from 'vue-router';
 import moxios from 'moxios';
+import stubRequest from '../helpers';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
 const options = { ploneRoot: PLONE_ROOT, apiRoot: API_ROOT };
+const traverser = {
+  views: [{ view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } }],
+  options,
+};
+const router = new Router();
 
 describe('axios instance', () => {
-  beforeEach(() => moxios.install());
-  afterEach(() => moxios.uninstall());
+  stubRequest('/', { '@type': 'Folder' });
+  stubRequest('folder', { '@type': 'Folder' });
 
   Vue.use(Router);
   Vue.use(Traverser);
@@ -23,22 +29,6 @@ describe('axios instance', () => {
   });
 
   test('matches given view when navigating', (done) => {
-    moxios.stubRequest('http://localhost:9000/plone/folder', {
-      status: 200,
-      response: {
-        '@type': 'Folder',
-        title: 'Title',
-        text: 'text',
-      },
-    });
-
-    const traverser = {
-      views: [{ view: 'view', type: 'Folder', component: { name: 'FolderViewComponent' } }],
-      options,
-    };
-
-    const router = new Router();
-
     const vm = new Vue({
       router,
       traverser,
