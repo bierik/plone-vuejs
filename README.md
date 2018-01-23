@@ -117,6 +117,35 @@ export default {
 </script>
 ```
 
+## Component lookup
+
+The component lookup is configured by passing a `views` list to the vue instance.
+The default view is defined as `@view`.
+
+So in the following example a request for `/folder` will resolve the `FolderViewComponent` and a request for `/folder/@edit` will resolve to `FolderEditComponent`.
+``` javascript
+const views = [
+  { type: 'Folder', component: { name: 'FolderViewComponent' } },
+  { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+];
+```
+
+It is not possible to define the same view for the same type. So the following configuration will throw an error when trying to resolve `/folder/@edit`.
+``` javascript
+const views = [
+  { view: 'edit', type: 'Folder', component: { name: 'FolderViewComponent' } },
+  { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+];
+```
+
+Also multple default views is not working. So the following configuration will also throw an error when trying to resolve `/folder`.
+``` javascript
+const views = [
+  { type: 'Folder', component: { name: 'FolderViewComponent' } },
+  { type: 'Folder', component: { name: 'FolderEditComponent' } },
+];
+```
+
 See `/src` for a full working example.
 
 ## Developing

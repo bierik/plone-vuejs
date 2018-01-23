@@ -47,6 +47,66 @@ describe('traverser', () => {
     });
   });
 
+  test('default view is @view', (done) => {
+    const views = [
+      { type: 'Folder', component: { name: 'FolderViewComponent' } },
+      { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+    ];
+
+    const paths = [
+      '/folder',
+      '/folder/@edit',
+    ];
+
+    Promise.all(paths.map(path => lookup({ views, path, options }))).then((cs) => {
+      assert.deepEqual(
+        cs.map(c => c.component.name),
+        [
+          'FolderViewComponent',
+          'FolderEditComponent',
+        ],
+      );
+      done();
+    });
+  });
+
+  test('multiple views defined for same type throws Error', (done) => {
+    const views = [
+      { view: 'edit', type: 'Folder', component: { name: 'FolderViewComponent' } },
+      { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+    ];
+
+    const path = '/folder/@edit';
+
+    lookup({ views, path, options }).catch((e) => {
+      assert.equal(e.message, 'Multiple views named "edit" defined for component with type "Folder"');
+      done();
+    });
+  });
+
+  test('multiple default views defined for same type throws Error', (done) => {
+    const views = [
+      { type: 'Folder', component: { name: 'FolderViewComponent' } },
+      { type: 'Folder', component: { name: 'FolderEditComponent' } },
+    ];
+
+    const path = '/folder';
+
+    lookup({ views, path, options }).catch((e) => {
+      assert.equal(e.message, 'Multiple default views defined for component with type "Folder"');
+      done();
+    });
+  });
+
+  test('throws error when no component as been found', (done) => {
+    const views = [];
+    const path = '/folder';
+    lookup({ views, path, options }).catch((e) => {
+      assert.equal(e.message, 'Component for type "Folder" could not be found');
+      done();
+    });
+  });
+
   test('matches given view when navigating', (done) => {
     Vue.use(Router);
     Vue.use(Traverser);

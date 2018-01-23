@@ -6,11 +6,31 @@ import executeHook from '@/traverser/traverseHook';
 export function lookup({ views, path, options }) {
   return resolve(path, options).then(({ res, view }) => {
     const type = res['@type'];
-    const componentLookup = views.find(v => v.type === type && v.view === view);
-    if (!componentLookup) {
+    const componentsByType = views.filter(v => v.type === type);
+
+    if (!componentsByType.length) {
       throw new Error(`Component for type "${type}" could not be found`);
     }
-    return { component: componentLookup.component, context: res };
+
+    const componentsByView = componentsByType.filter(v => v.view === view);
+
+    if (componentsByView.length > 1) {
+      throw new Error(`Multiple views named "${view}" defined for component with type "${type}"`);
+    }
+
+    const componentLookup = componentsByView.find(v => v.view === view);
+
+    if (componentLookup) {
+      return { component: componentLookup.component, context: res };
+    }
+
+    const defaultViews = views.filter(v => !v.view);
+
+    if (defaultViews.length > 1) {
+      throw new Error(`Multiple default views defined for component with type "${type}"`);
+    }
+
+    return { component: defaultViews[0].component, context: res };
   });
 }
 
