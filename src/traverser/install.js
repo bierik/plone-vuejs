@@ -1,12 +1,11 @@
 import View from '@/traverser/view';
 import TraverserLink from '@/traverser/traverser-link';
 import { updateComponent, traverse } from '@/traverser/traverser';
+import traverserComponent from '@/traverser/traverserComponent';
 import axios from 'axios';
 
 const plugin = {
   install(Vue) {
-    const traverserComponent = Vue.component('traverser-component', { template: '<p>traverser component...</p>' });
-
     Vue.http = axios;
 
     Vue.mixin({
@@ -14,6 +13,7 @@ const plugin = {
         if (this.$options.traverser) {
           const views = this.$options.traverser.views || [];
           const options = this.$options.traverser.options;
+
           Vue.util.defineReactive(Vue.prototype, '_component', traverserComponent);
           Vue.util.defineReactive(Vue.prototype, '_context', {});
 
@@ -25,7 +25,9 @@ const plugin = {
             traverse(item, this.$router, this.$options.traverser.options);
           };
 
-          updateComponent({ views, path: this.$route.fullPath, vm: Vue, options });
+          const path = this.$route.path;
+          updateComponent({ views, path, vm: Vue, options });
+
           this.$router.beforeEach((to, from, next) => {
             updateComponent({ views, path: to.path, vm: Vue, options }).then(next);
           });

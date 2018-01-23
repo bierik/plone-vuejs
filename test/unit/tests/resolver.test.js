@@ -1,13 +1,10 @@
 import resolve, { extractView, api } from '@/traverser/resolver';
-import moxios from 'moxios';
+import stubRequest from '../helpers';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
+const options = { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT };
 
 describe('resolver', () => {
-  beforeEach(() => moxios.install());
-
-  afterEach(() => moxios.uninstall());
-
   test('http client configuration', () => {
     assert.isTrue(
       api.defaults.headers.common.Accept.includes('*/*'),
@@ -16,25 +13,17 @@ describe('resolver', () => {
   });
 
   test('resolve path', (done) => {
-    moxios.stubRequest('http://localhost:9000/plone/', {
-      status: 200,
-      response: { title: 'root' },
-    });
+    stubRequest('/', { title: 'root' });
 
-    moxios.stubRequest('http://localhost:9000/plone/folder', {
-      status: 200,
-      response: { title: 'folder' },
-    });
+    stubRequest('folder', { title: 'folder' });
 
-    resolve('/', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }).then(({ res }) => {
+    resolve('/', options).then(({ res }) => {
       assert.deepEqual(res, { title: 'root' });
-      moxios.uninstall();
       done();
     });
 
-    resolve('/folder', { apiRoot: API_ROOT, ploneRoot: PLONE_ROOT }).then(({ res }) => {
+    resolve('/folder', options).then(({ res }) => {
       assert.deepEqual(res, { title: 'folder' });
-      moxios.uninstall();
       done();
     });
   });

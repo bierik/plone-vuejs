@@ -6,7 +6,6 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
 }
 
-const opn = require('opn')
 const path = require('path')
 const express = require('express')
 const webpack = require('webpack')
@@ -72,9 +71,6 @@ mockServer.ready.then(() => {
       process.env.PORT = port
       var uri = 'http://localhost:' + port
       console.log('> Listening at ' + uri + '\n')
-      if (autoOpenBrowser) {
-        opn(uri)
-      }
       app.listen(port);
     })
   });

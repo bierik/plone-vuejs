@@ -18,7 +18,7 @@ afterEach(async () => {
 beforeAll(async () => {
   browser = await puppeteer.launch({
     headless: true,
-    args: [`--window-size=${width},${height}`],
+    args: [`--window-size=${width},${height}`, '--no-sandbox'],
   });
 });
 

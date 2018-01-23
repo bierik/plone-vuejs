@@ -1,5 +1,7 @@
 import resolve from '@/traverser/resolver';
 import { createTraverserLink } from '@/traverser/normalizer';
+import executeHook from '@/traverser/traverseHook';
+
 
 export function lookup({ views, path, options }) {
   return resolve(path, options).then(({ res, view }) => {
@@ -14,8 +16,20 @@ export function lookup({ views, path, options }) {
 
 export function updateComponent({ views, path, vm, options }) {
   return lookup({ views, path, options }).then(({ component, context }) => {
-    vm.prototype._component = component;
-    vm.prototype._context = context;
+    executeHook(
+      component.onTraverse,
+      null,
+      path,
+      options,
+    ).then(({ key, data }) => {
+      const hookContext = context;
+      hookContext[key] = data;
+      vm.prototype._context = hookContext;
+      vm.prototype._component = component;
+    }).catch(() => {
+      vm.prototype._component = component;
+      vm.prototype._context = context;
+    });
   });
 }
 
