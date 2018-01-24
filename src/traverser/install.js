@@ -14,7 +14,7 @@ const plugin = {
           const views = this.$options.traverser.views || [];
           const options = this.$options.traverser.options;
 
-          Vue.util.defineReactive(Vue.prototype, '_component', traverserComponent);
+          Vue.util.defineReactive(Vue.prototype, '_component', Vue.component(traverserComponent.name, traverserComponent));
           Vue.util.defineReactive(Vue.prototype, '_context', {});
 
           if (!this.$router) {
