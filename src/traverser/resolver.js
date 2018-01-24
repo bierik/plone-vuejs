@@ -13,11 +13,15 @@ export function extractView(path) {
   return view.substring(1);
 }
 
+export function extractObjectPath(path) {
+  return path.split(/\/(@[^?|/]*)/g)[0];
+}
+
 export function redirect(path, options) {
   return api.get(createAPILink(path, options)).catch('redirect');
 }
 
 export default function resolve(path, options) {
-  return api.get(createAPILink(path, options))
+  return api.get(createAPILink(extractObjectPath(path), options))
     .then(res => ({ res: res.data, view: extractView(path) }));
 }

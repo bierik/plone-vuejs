@@ -1,4 +1,4 @@
-import resolve, { extractView, api } from '@/traverser/resolver';
+import resolve, { extractObjectPath, extractView, api } from '@/traverser/resolver';
 import stubRequest from '../helpers';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
@@ -53,6 +53,33 @@ describe('resolver', () => {
         'edit',
         'edit',
         'list',
+      ],
+    );
+  });
+
+  test('extracts object path from path', () => {
+    const paths = [
+      '',
+      '/',
+      'plone',
+      'plone/folder',
+      'plone/folder/@edit',
+      'plone/folder@edit',
+      'plone/folder/@edit?key=value',
+      'plone/folder/edit/@list',
+    ];
+
+    assert.deepEqual(
+      paths.map(extractObjectPath),
+      [
+        '',
+        '/',
+        'plone',
+        'plone/folder',
+        'plone/folder',
+        'plone/folder@edit',
+        'plone/folder',
+        'plone/folder/edit',
       ],
     );
   });
