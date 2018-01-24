@@ -7,6 +7,7 @@ import PloneSite from '@/components/PloneSite';
 import Document from '@/components/Document';
 import NewsItem from '@/components/NewsItem';
 import EventItem from '@/components/EventItem';
+import Sharing from '@/components/Sharing';
 
 Vue.config.productionTip = false;
 
@@ -33,6 +34,11 @@ const traverser = {
       type: 'Document',
       view: 'view',
       component: Document,
+    },
+    {
+      type: 'Document',
+      view: 'sharing',
+      component: Sharing,
     },
     {
       type: 'News Item',

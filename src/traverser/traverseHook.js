@@ -1,4 +1,4 @@
-import { redirect } from '@/traverser/resolver';
+import { redirect, extractObjectPath } from '@/traverser/resolver';
 import joinPath from 'path.join';
 
 
@@ -12,10 +12,10 @@ export default function executeHook(hook, from, to, options) {
       from,
       to,
       (path) => {
-        if (!path) {
+        if (typeof path === 'undefined') {
           reject();
         }
-        redirect(joinPath(to, path), options)
+        redirect(joinPath(extractObjectPath(to), path), options)
           .then(({ data }) => {
             resolve({ data, key: path });
           })
