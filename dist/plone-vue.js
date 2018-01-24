@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,7 +80,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(7);
 var isBuffer = __webpack_require__(23);
 
 /*global toString:true*/
@@ -581,9 +581,9 @@ process.umask = function() { return 0; };
 /* harmony export (immutable) */ __webpack_exports__["c"] = createAPILink;
 /* harmony export (immutable) */ __webpack_exports__["a"] = createLink;
 /* harmony export (immutable) */ __webpack_exports__["b"] = createTraverserLink;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_path_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_path_join__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url_parse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_url_parse__);
 
 
@@ -632,10 +632,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(8);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(6);
+    adapter = __webpack_require__(8);
   }
   return adapter;
 }
@@ -712,10 +712,68 @@ module.exports = defaults;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(22);
+/* WEBPACK VAR INJECTION */(function(process) {var path = __webpack_require__(16);
+module.exports = function(args1, args2/*, ... argsN*/) {
+	var fullPath = path.join.apply(null, arguments);
+	if (process.platform === 'win32') {
+		fullPath = fullPath.replace(/\\/g, '/');
+	}
+	return fullPath;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export extractView */
+/* harmony export (immutable) */ __webpack_exports__["b"] = extractObjectPath;
+/* harmony export (immutable) */ __webpack_exports__["c"] = redirect;
+/* harmony export (immutable) */ __webpack_exports__["a"] = resolve;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(2);
+
+
+
+const api = process.env.NODE_ENV !== 'test' ? __WEBPACK_IMPORTED_MODULE_0_axios___default.a.create({
+  headers: {
+    Accept: 'application/json',
+  },
+}) : __WEBPACK_IMPORTED_MODULE_0_axios___default.a;
+/* unused harmony export api */
+
+
+function extractView(path) {
+  const matches = /\/(@[^?|/]*)/g.exec(path);
+  const view = (matches && matches[1]) || '@view';
+  return view.substring(1);
+}
+
+function extractObjectPath(path) {
+  return path.split(/\/(@[^?|/]*)/g)[0];
+}
+
+function redirect(path, options) {
+  return api.get(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["c" /* default */])(path, options)).catch('redirect');
+}
+
+function resolve(path, options) {
+  return api.get(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["c" /* default */])(extractObjectPath(path), options))
+    .then(res => ({ res: res.data, view: extractView(path) }));
+}
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(22);
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -733,7 +791,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -744,7 +802,7 @@ var settle = __webpack_require__(26);
 var buildURL = __webpack_require__(28);
 var parseHeaders = __webpack_require__(29);
 var isURLSameOrigin = __webpack_require__(30);
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(9);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(31);
 
 module.exports = function xhrAdapter(config) {
@@ -921,7 +979,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -946,7 +1004,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -958,7 +1016,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -984,13 +1042,13 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_install__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_basecomponent__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_install__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_basecomponent__ = __webpack_require__(42);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "basecomponent", function() { return __WEBPACK_IMPORTED_MODULE_1__traverser_basecomponent__["a"]; });
 
 
@@ -1000,15 +1058,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_view__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_traverser_link__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__traverser_traverser__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_view__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_traverser_link__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__traverser_traverser__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__traverser_traverserComponent__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
+
 
 
 
@@ -1016,16 +1076,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 const plugin = {
   install(Vue) {
-    const traverserComponent = Vue.component('traverser-component', { template: '<p>traverser component...</p>' });
-
-    Vue.http = __WEBPACK_IMPORTED_MODULE_3_axios___default.a;
+    Vue.http = __WEBPACK_IMPORTED_MODULE_4_axios___default.a;
 
     Vue.mixin({
       beforeCreate() {
         if (this.$options.traverser) {
           const views = this.$options.traverser.views || [];
           const options = this.$options.traverser.options;
-          Vue.util.defineReactive(Vue.prototype, '_component', traverserComponent);
+
+          Vue.util.defineReactive(Vue.prototype, '_component', Vue.component(__WEBPACK_IMPORTED_MODULE_3__traverser_traverserComponent__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_3__traverser_traverserComponent__["a" /* default */]));
           Vue.util.defineReactive(Vue.prototype, '_context', {});
 
           if (!this.$router) {
@@ -1036,7 +1095,9 @@ const plugin = {
             Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["a" /* traverse */])(item, this.$router, this.$options.traverser.options);
           };
 
-          Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["b" /* updateComponent */])({ views, path: this.$route.fullPath, vm: Vue, options });
+          const path = this.$route.path;
+          Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["b" /* updateComponent */])({ views, path, vm: Vue, options });
+
           this.$router.beforeEach((to, from, next) => {
             Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverser__["b" /* updateComponent */])({ views, path: to.path, vm: Vue, options }).then(next);
           });
@@ -1052,7 +1113,7 @@ const plugin = {
       get() { return this._context; },
     });
 
-    Vue.prototype.http = __WEBPACK_IMPORTED_MODULE_3_axios___default.a;
+    Vue.prototype.http = __WEBPACK_IMPORTED_MODULE_4_axios___default.a;
 
     Vue.component(__WEBPACK_IMPORTED_MODULE_0__traverser_view__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_0__traverser_view__["a" /* default */]);
     Vue.component(__WEBPACK_IMPORTED_MODULE_1__traverser_traverser_link__["a" /* default */].name, __WEBPACK_IMPORTED_MODULE_1__traverser_traverser_link__["a" /* default */]);
@@ -1063,7 +1124,7 @@ const plugin = {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1074,7 +1135,7 @@ const plugin = {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1100,21 +1161,7 @@ const plugin = {
 
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process) {var path = __webpack_require__(15);
-module.exports = function(args1, args2/*, ... argsN*/) {
-	var fullPath = path.join.apply(null, arguments);
-	if (process.platform === 'win32') {
-		fullPath = fullPath.replace(/\\/g, '/');
-	}
-	return fullPath;
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -1345,14 +1392,14 @@ var substr = 'ab'.substr(-1) === 'b'
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var required = __webpack_require__(18)
-  , qs = __webpack_require__(19)
+var required = __webpack_require__(19)
+  , qs = __webpack_require__(20)
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
   , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
 
@@ -1757,10 +1804,10 @@ URL.qs = qs;
 
 module.exports = URL;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1787,7 +1834,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1832,7 +1879,7 @@ module.exports = function required(port, protocol) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1911,33 +1958,68 @@ exports.parse = querystring;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export lookup */
 /* harmony export (immutable) */ __webpack_exports__["b"] = updateComponent;
 /* harmony export (immutable) */ __webpack_exports__["a"] = traverse;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_resolver__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_resolver__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__traverser_traverseHook__ = __webpack_require__(40);
+
+
 
 
 
 function lookup({ views, path, options }) {
   return Object(__WEBPACK_IMPORTED_MODULE_0__traverser_resolver__["a" /* default */])(path, options).then(({ res, view }) => {
     const type = res['@type'];
-    const componentLookup = views.find(v => v.type === type && v.view === view);
-    if (!componentLookup) {
+    const componentsByType = views.filter(v => v.type === type);
+
+    if (!componentsByType.length) {
       throw new Error(`Component for type "${type}" could not be found`);
     }
-    return { component: componentLookup.component, context: res };
+
+    const componentsByView = componentsByType.filter(v => v.view === view);
+
+    if (componentsByView.length > 1) {
+      throw new Error(`Multiple views named "${view}" defined for component with type "${type}"`);
+    }
+
+    const componentLookup = componentsByView.find(v => v.view === view);
+
+    if (componentLookup) {
+      return { component: componentLookup.component, context: res };
+    }
+
+    const defaultViews = views.filter(v => !v.view);
+
+    if (defaultViews.length > 1) {
+      throw new Error(`Multiple default views defined for component with type "${type}"`);
+    }
+
+    return { component: defaultViews[0].component, context: res };
   });
 }
 
 function updateComponent({ views, path, vm, options }) {
   return lookup({ views, path, options }).then(({ component, context }) => {
-    vm.prototype._component = component;
-    vm.prototype._context = context;
+    Object(__WEBPACK_IMPORTED_MODULE_2__traverser_traverseHook__["a" /* default */])(
+      component.onTraverse,
+      null,
+      path,
+      options,
+    ).then(({ key, data }) => {
+      const hookContext = context;
+      hookContext[key] = data;
+      vm.prototype._context = hookContext;
+      vm.prototype._component = component;
+    }).catch(() => {
+      vm.prototype._component = component;
+      vm.prototype._context = context;
+    });
   });
 }
 
@@ -1947,40 +2029,6 @@ function traverse(item, router, options) {
 
 
 /***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export extractView */
-/* harmony export (immutable) */ __webpack_exports__["a"] = resolve;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__ = __webpack_require__(2);
-
-
-
-const api = process.env.NODE_ENV !== 'test' ? __WEBPACK_IMPORTED_MODULE_0_axios___default.a.create({
-  headers: {
-    Accept: 'application/json',
-  },
-}) : __WEBPACK_IMPORTED_MODULE_0_axios___default.a;
-/* unused harmony export api */
-
-
-function extractView(path) {
-  const matches = /\/(@[^?|/]*)/g.exec(path);
-  const view = (matches && matches[1]) || '@view';
-  return view.substring(1);
-}
-
-function resolve(path, options) {
-  return api.get(Object(__WEBPACK_IMPORTED_MODULE_1__traverser_normalizer__["c" /* default */])(path, options))
-    .then(res => ({ res: res.data, view: extractView(path) }));
-}
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
-
-/***/ }),
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1988,7 +2036,7 @@ function resolve(path, options) {
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(7);
 var Axios = __webpack_require__(24);
 var defaults = __webpack_require__(3);
 
@@ -2023,9 +2071,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(9);
+axios.Cancel = __webpack_require__(11);
 axios.CancelToken = __webpack_require__(38);
-axios.isCancel = __webpack_require__(8);
+axios.isCancel = __webpack_require__(10);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -2185,7 +2233,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(9);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -2604,7 +2652,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(35);
-var isCancel = __webpack_require__(8);
+var isCancel = __webpack_require__(10);
 var defaults = __webpack_require__(3);
 
 /**
@@ -2757,7 +2805,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(9);
+var Cancel = __webpack_require__(11);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -2850,6 +2898,54 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = executeHook;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__traverser_resolver__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path_join__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_path_join___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_path_join__);
+
+
+
+
+function executeHook(hook, from, to, options) {
+  if (!hook) {
+    return Promise.reject();
+  }
+
+  return new Promise((resolve, reject) => {
+    hook(
+      from,
+      to,
+      (path) => {
+        if (typeof path === 'undefined') {
+          reject();
+        }
+        Object(__WEBPACK_IMPORTED_MODULE_0__traverser_resolver__["c" /* redirect */])(__WEBPACK_IMPORTED_MODULE_1_path_join___default()(Object(__WEBPACK_IMPORTED_MODULE_0__traverser_resolver__["b" /* extractObjectPath */])(to), path), options)
+          .then(({ data }) => {
+            resolve({ data, key: path });
+          })
+          .catch(reject);
+      },
+    );
+  });
+}
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'traverser-component',
+  template: '<p>traverser component...</p>',
+});
+
+
+/***/ }),
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
