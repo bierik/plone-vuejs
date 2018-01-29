@@ -51,11 +51,14 @@ describe('traverser', () => {
     const views = [
       { type: 'Folder', component: { name: 'FolderViewComponent' } },
       { view: 'edit', type: 'Folder', component: { name: 'FolderEditComponent' } },
+      { type: 'Event', component: { name: 'EventComponent' } },
+      { view: 'edit', type: 'Event', component: { name: 'EventEditComponent' } },
     ];
 
     const paths = [
       '/folder',
       '/folder/@edit',
+      '/event',
     ];
 
     Promise.all(paths.map(path => lookup({ views, path, options }))).then((cs) => {
@@ -64,6 +67,7 @@ describe('traverser', () => {
         [
           'FolderViewComponent',
           'FolderEditComponent',
+          'EventComponent',
         ],
       );
       done();

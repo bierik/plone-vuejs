@@ -24,7 +24,7 @@ export function lookup({ views, path, options }) {
       return { component: componentLookup.component, context: res };
     }
 
-    const defaultViews = views.filter(v => !v.view);
+    const defaultViews = componentsByType.filter(v => !v.view);
 
     if (defaultViews.length > 1) {
       throw new Error(`Multiple default views defined for component with type "${type}"`);
