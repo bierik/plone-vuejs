@@ -1,6 +1,6 @@
 {
   "name": "plone-vue",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "description": "A simple Vue.js SDK to build web sites easily on top of the Plone RESTAPI",
   "author": "Kevin Bieri <k.bieri@4teamwork.ch>",
