@@ -133,5 +133,34 @@ describe('traverser', () => {
 
     router.push('/folder');
   });
+
+  test('regular router definition is still working with traverser activated', (done) => {
+    Vue.use(Router);
+    Vue.use(Traverser);
+
+    const fooRouter = new Router({
+      routes: [
+        { path: '/', component: { name: 'root' } },
+        { path: '/foo', component: { name: 'foo' } },
+      ],
+    });
+
+    const vm = new Vue({
+      router: fooRouter,
+      traverser,
+      template: '<router-view></router-view>',
+      watch: {
+        $route: () => {
+          assert.deepEqual(
+            vm.$router.currentRoute.matched.map(r => r.components.default.name),
+            ['foo'],
+          );
+          done();
+        },
+      },
+    });
+
+    fooRouter.push('/foo');
+  });
 });
 
