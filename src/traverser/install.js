@@ -26,9 +26,15 @@ const plugin = {
           };
 
           const path = this.$route.path;
-          updateComponent({ views, path, vm: Vue, options });
+          if (this.$router.getMatchedComponents(path).length === 0) {
+            updateComponent({ views, path, vm: Vue, options });
+          }
 
           this.$router.beforeEach((to, from, next) => {
+            if (this.$router.getMatchedComponents(to).length) {
+              next();
+              return;
+            }
             updateComponent({ views, path: to.path, vm: Vue, options }).then(next);
           });
         }
