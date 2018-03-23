@@ -1,11 +1,5 @@
-import axios from 'axios';
+import { api } from '@/traverser/install';
 import createAPILink from '@/traverser/normalizer';
-
-export const api = process.env.NODE_ENV !== 'test' ? axios.create({
-  headers: {
-    Accept: 'application/json',
-  },
-}) : axios;
 
 export function extractView(path) {
   const matches = /\/(@[^?|/]*)/g.exec(path);

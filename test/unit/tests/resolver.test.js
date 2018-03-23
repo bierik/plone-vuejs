@@ -1,4 +1,5 @@
-import resolve, { extractObjectPath, extractView, api } from '@/traverser/resolver';
+import resolve, { extractObjectPath, extractView } from '@/traverser/resolver';
+import { api } from '@/traverser/install';
 import stubRequest from '../helpers';
 
 const { API_ROOT, PLONE_ROOT } = process.env;
