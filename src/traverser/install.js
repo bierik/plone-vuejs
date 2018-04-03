@@ -4,9 +4,15 @@ import { updateComponent, traverse } from '@/traverser/traverser';
 import traverserComponent from '@/traverser/traverserComponent';
 import axios from 'axios';
 
+export const api = process.env.NODE_ENV !== 'test' ? axios.create({
+  headers: {
+    Accept: 'application/json',
+  },
+}) : axios;
+
 const plugin = {
   install(Vue) {
-    Vue.http = axios;
+    Vue.http = api;
 
     Vue.mixin({
       beforeCreate() {
@@ -49,7 +55,7 @@ const plugin = {
       get() { return this._context; },
     });
 
-    Vue.prototype.http = axios;
+    Vue.prototype.http = api;
 
     Vue.component(View.name, View);
     Vue.component(TraverserLink.name, TraverserLink);
